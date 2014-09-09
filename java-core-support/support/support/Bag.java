@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class Bag<E> implements com.example.exercise.Exercise1.Collection<E>, 
-							   com.example.solution.Exercise1.Collection<E> {
+public class Bag<E> implements com.example.exercise.Exercise2.Collection<E>, 
+							   com.example.solution.Exercise2.Collection<E> {
 
 	private List<E> backing = new java.util.ArrayList<E>();
 	

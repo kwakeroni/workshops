@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotSame;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -16,8 +15,9 @@ import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
-import support.Bag;
-
+/**
+ * Exercises on Lambda Expressions, Functional Interfaces and Method References.
+ */
 public class Exercise1 {
 
 	/*
@@ -139,34 +139,7 @@ public class Exercise1 {
 		assertEquals('l', atChar.apply(2, "Hello").charValue());
 		assertEquals(5, ofIndex.apply("Why, Hello World!").intValue());
 	}
-	
-	/**
-	 * Rewrite the following piece of code to use internal iteration 
-	 * (using the forEach method) instead of external iteration.
-	 * Hint: for reasons of simplicity, we use our own Collection interface, defined below.
-	 */
-	@Test
-	public void exercise6(){
-		Collection<String> strings = new Bag<>("one", "two", "three");
-		
-		Iterator<String> iter = strings.iterator();
-		while (iter.hasNext()){
-			System.out.println(iter.next());
-		}
-		
-	}
-	
-	public interface Collection<E> {
 
-	    int size();
-
-	    Iterator<E> iterator();
-
-	    boolean add(E e);
-	    
-	    boolean addAll(java.util.Collection<? extends E> c);
-		
-	}
 	
 	
 }

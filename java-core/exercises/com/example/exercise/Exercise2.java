@@ -3,16 +3,49 @@ package com.example.exercise;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import support.Bag;
+
+/**
+ * Exercises on Default Methods and new Java core API methods.
+ */
 public class Exercise2 {
 
-
+	
+	/*
+	 * Add a forEach method to the Collection interface (defined below) and
+	 * rewrite the following piece of code to use internal iteration instead of external iteration.
+	 */
 	@Test
 	public void exercise1(){
+		Collection<String> strings = new Bag<>("one", "two", "three");
+		
+		Iterator<String> iter = strings.iterator();
+		while (iter.hasNext()){
+			System.out.println(iter.next());
+		}
+		
+	}
+	
+	public interface Collection<E> {
+
+	    int size();
+
+	    Iterator<E> iterator();
+
+	    boolean add(E e);
+	    
+	    boolean addAll(java.util.Collection<? extends E> c);
+		
+	}
+
+	@Test
+	public void exercise2(){
 		List<String> strings = Arrays.asList("Alpha", "Beta", "Gamma", "Delta");
 
 		StringBuilder builder = new StringBuilder();
@@ -23,7 +56,7 @@ public class Exercise2 {
 	
 	
 	@Test
-	public void exercise2(){
+	public void exercise3(){
 		List<String> strings = Arrays.asList("Alpha", "Beta", "Gamma", "Delta");
 		
 		// Replace all items in "strings" with their uppercase value
@@ -32,7 +65,7 @@ public class Exercise2 {
 	}
 
 	@Test
-	public void exercise3(){
+	public void exercise4(){
 		List<String> strings = new java.util.ArrayList<>(Arrays.asList("Alpha", "Beta", "Gamma", "Delta"));
 
 		// Remove all items from the list that have less than 5 characters
@@ -43,7 +76,7 @@ public class Exercise2 {
 	}
 
 	@Test
-	public void exercise4(){
+	public void exercise5(){
 		Map<Integer, String> map = new java.util.HashMap<>(5);
 		map.put(1, "one");
 		map.put(2, "two");
@@ -63,7 +96,7 @@ public class Exercise2 {
 	}
 	
 	@Test
-	public void exercise5(){
+	public void exercise6(){
 		Map<Integer, List<Integer>> modulo = new java.util.HashMap<>();
 		
 		// Group all integers between 0 and 100 in lists according to their value modulo 10
@@ -75,7 +108,7 @@ public class Exercise2 {
 
 
 	@Test
-	public void exercise6(){
+	public void exercise7(){
 		String[] intNames = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
 		List<Integer> ints = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		
@@ -85,7 +118,7 @@ public class Exercise2 {
 	}
 	
 	@Test
-	public void exercise7(){
+	public void exercise8(){
 		List<String> strings = Arrays.asList("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 		
 		// Sort the items in "strings" first according to their length, then alphabetically
@@ -95,7 +128,7 @@ public class Exercise2 {
 	
 	
 	@Test
-	public void exercise8(){
+	public void exercise9(){
 		String[] intNames = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
 		List<Integer> ints = Arrays.asList(null, 1, 2, 3, null, 5, 6, 7, null, 9, 10);
 		
