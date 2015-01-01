@@ -16,22 +16,22 @@ public class Reducers extends Lambda {
 	}
 
 	public static void codeExamples(){
-		System.out.println(IntStream.of().sum() == 0);
-		IntBinaryOperator product = (i,j) -> i * j;
-		System.out.println(IntStream.of().reduce(1, product) == 1);
-		System.out.println(IntStream.of().max());
-		
-		OptionalInt result = IntStream.of().max();
-		
-		if (result.isPresent()) { System.out.println(result.getAsInt()); }
-		result.ifPresent( i -> System.out.println(i) );
+        System.out.println(IntStream.of().sum() == 0);
+        IntBinaryOperator product = (i,j) -> i * j;
+        System.out.println(IntStream.of().reduce(1, product) == 1);
+        System.out.println(IntStream.of().max());
+        
+        OptionalInt result = IntStream.of().max();
+        
+        if (result.isPresent()) { System.out.println(result.getAsInt()); }
+        result.ifPresent( i -> System.out.println(i) );
 
-		System.out.println(result.orElse(-1));
-		System.out.println(result.orElseThrow(() -> new IllegalStateException("no value")));
+        System.out.println(result.orElse(-1));
+        //System.out.println(result.orElseThrow(() -> new IllegalStateException("no value")));
 
-		Stream<?> stream = Arrays.asList().stream();
-		
-		List<?> list = stream.collect(Collectors.toList());
+        Stream<?> stream = Arrays.asList().stream();
+        
+        List<?> list = stream.collect(Collectors.toList());
 
 	}
 }

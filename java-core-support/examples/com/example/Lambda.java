@@ -92,7 +92,8 @@ public class Lambda {
 		Collections.sort(people, 
 				Comparator.comparing((Person p) -> p.getLastName()));
 
-		Collections.sort(people, comparing(p -> p.getLastName()));
+		//Collections.sort(people, comparing(p -> p.getLastName()));
+		Collections.sort(people, Comparator.<Person, String>comparing(p -> p.getLastName()));
 	}
 	
 	

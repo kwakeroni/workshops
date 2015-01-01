@@ -50,7 +50,7 @@ public class LibraryMethods {
 	@Test
 	public void testRemoveIf(){
 		// Print all items in the following list to System.out
-		List<String> strings = new java.util.ArrayList(Arrays.asList("Alpha", "Beta", "Gamma", "Delta"));
+		List<String> strings = new java.util.ArrayList<>(Arrays.asList("Alpha", "Beta", "Gamma", "Delta"));
 
 		strings.removeIf(s -> s.length() < 5);
 		
@@ -64,8 +64,8 @@ public class LibraryMethods {
 	 */
 	@Test
 	public void testForEachMap(){
-		List<Integer> keys = new java.util.ArrayList(5);
-		List<String> values = new java.util.ArrayList(5);
+		List<Integer> keys = new java.util.ArrayList<>(5);
+		List<String> values = new java.util.ArrayList<>(5);
 		
 		// Produce two lists where each key-value pair matches by index.
 		Map<Integer, String> map = new java.util.HashMap<>(5);
@@ -109,7 +109,8 @@ public class LibraryMethods {
 		List<Integer> ints = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		
 		// Sort the integers alphabetically by name
-		ints.sort(Comparator.comparing(i -> intNames[i]));
+		//ints.sort(Comparator.comparing(i -> intNames[i]));
+		ints.sort(Comparator.<Integer, String> comparing(i -> intNames[i]));
 		
 		System.out.println(ints);
 		
@@ -143,7 +144,8 @@ public class LibraryMethods {
 		List<Integer> ints = Arrays.asList(null, 1, 2, 3, null, 5, 6, 7, null, 9, 10);
 		
 		// Sort the integers alphabetically by name, with nulls coming at the end
-		ints.sort(Comparator.nullsLast(Comparator.comparing(i -> intNames[i])));
+		//ints.sort(Comparator.nullsLast(Comparator.comparing(i -> intNames[i])));
+		ints.sort(Comparator.nullsLast(Comparator.<Integer, String> comparing(i -> intNames[i])));
 		
 		System.out.println(ints);
 		

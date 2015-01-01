@@ -18,20 +18,34 @@ import org.junit.Test;
 public class Annotations {
 
 	public static void main(String[] args) throws Exception {
-		new Annotations().multiple();
+		new Annotations().multipleB();
 		main2(args);
+	}
+	
+	@Test
+	@A("A1")
+	@A("A2")
+	public void multipleA() throws Exception {
+		String method = "multipleA";
+		System.out.println("--- " + method);
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotations()));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(A.class)));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(B.class)));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(C.class)));	
+		
 	}
 	
 	@Test
 //	@A("A1")
 	@B(@A("BA1"))
 	@B(@A("BA2"))
-	public void multiple() throws Exception{
-		System.out.println( Arrays.asList(Annotations.class.getMethod("multiple").getAnnotations()));
-		System.out.println( Arrays.asList(Annotations.class.getMethod("multiple").getAnnotationsByType(A.class)));
-		System.out.println( Arrays.asList(Annotations.class.getMethod("multiple").getAnnotationsByType(B.class)));
-		System.out.println( Arrays.asList(Annotations.class.getMethod("multiple").getAnnotationsByType(C.class)));
-		
+	public void multipleB() throws Exception{
+		String method = "multipleB";
+		System.out.println("--- " + method);
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotations()));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(A.class)));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(B.class)));
+		System.out.println( Arrays.asList(Annotations.class.getMethod(method).getAnnotationsByType(C.class)));	
 	}
 	
 	@Target(ElementType.METHOD)
@@ -70,4 +84,30 @@ public class Annotations {
             final String key = p.getName();
             System.out.println(key);
     }
+    
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Repeatable(Aliases.class)
+    public @interface Alias {
+        String value();
+    }
+    
+    
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Aliases {
+        Alias[] value();
+    }
+    
+    @Aliases({ @Alias("One"), @Alias("Two")})
+    class Test1 {
+        
+    }
+    
+    @Alias("One")
+    @Alias("Two")
+    class Test2 {
+        
+    }
+    
 }

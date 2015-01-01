@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="Support" default="CreateJar">
   <target name="CreateJar" description="Create Jar file">
-        <jar jarfile="../java-core/lib/workshop-support.jar" basedir="bin" includes="support/*.class" />
+        <jar jarfile="../java-core/lib/workshop-support.jar" basedir="bin" includes="support/*.class,com/example/solution/*.class" />
   </target>
 </project>
