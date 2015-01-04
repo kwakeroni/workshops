@@ -1,20 +1,17 @@
-package com.example.solution;
+package com.example.exercise;
 
-import java.time.Clock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.MonthDay;
 import java.time.Period;
-import java.time.Year;
-import java.time.YearMonth;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class Exercise_Time {
 
@@ -22,14 +19,7 @@ public class Exercise_Time {
     public void exercise1(){
         // Obtain the current time in milliseconds (since Epoch etc...)
         long epochMilli = 0;
-        epochMilli = System.currentTimeMillis();
-        epochMilli = Clock.systemDefaultZone().millis();
-        epochMilli = Clock.systemUTC().millis();
-        epochMilli = Clock.systemDefaultZone().instant().toEpochMilli();
-        epochMilli = Clock.systemUTC().instant().toEpochMilli();
-        
-        epochMilli = LocalDateTime.of(2015, Month.JANUARY, 7, 11, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        
+
         // Verify
         assertTrue(epochMilli + "<= 1420617600000", epochMilli > 1420617600000L);
         assertTrue(epochMilli + ">= 1420635600000", epochMilli < 1420635600000L);
@@ -38,13 +28,13 @@ public class Exercise_Time {
     @Test
     public void exercise2(){
         // Obtain the current date and time
-        LocalDateTime here = LocalDateTime.now();
+        LocalDateTime here = null;
         
         // Obtain the current date and time in the UTC time zone
-        ZonedDateTime greenwich = ZonedDateTime.now(Clock.systemUTC());
+        ZonedDateTime greenwich = null;
         
         // If it is january 7th 22h30 in New York (EST), what time is it in Moscow (Europe/Moscow) ?
-        ZonedDateTime inMoscow = ZonedDateTime.of(LocalDateTime.of(2015, Month.JANUARY, 7, 22, 30), ZoneId.of("EST")).withZoneSameInstant(ZoneId.of("Europe/Moscow"));
+        ZonedDateTime inMoscow = null;
         
         
         // Verify
@@ -57,26 +47,23 @@ public class Exercise_Time {
     
     @Test
     public void exercise3(){
-        LocalDate now = LocalDate.now();
-        now = LocalDate.of(2015,  Month.JANUARY, 7);
-        
         // Obtain the number of days in the current month
-        int lengthMonth = now.lengthOfMonth();
+        int lengthMonth = 0;
         
         // Verify if we are currently in a leap year
-        boolean leap = now.isLeapYear();
+        boolean leap = true;
         
         // Obtain the number of days in the current year
-        int lengthYear = now.lengthOfYear();
+        int lengthYear = 0;
         
         // How many days are there in 2076 ?
-        int lengthYear2076 = Year.of(2076).length();
+        int lengthYear2076 = 0;
         
         // How many days are there in june ?
-        int lengthJune = Month.JUNE.length(false);
+        int lengthJune = 0;
         
         // How many days are there in february 2392 ?
-        int lengthFebruary2392 = YearMonth.of(2392, Month.FEBRUARY).lengthOfMonth();
+        int lengthFebruary2392 = 0;
         
         // Verify
         assertEquals(31, lengthMonth);
@@ -90,16 +77,16 @@ public class Exercise_Time {
     @Test
     public void exercise4(){
         // What year were you born ?
-        int year = 1981;
+        int year = 0;
         
         // Create an object that represents your birthday
-        MonthDay birthday = MonthDay.of(Month.DECEMBER, 14);
+        MonthDay birthday = null;
         
         // Calculate your age in days
-        long days = birthday.atYear(year).until(LocalDate.now(), ChronoUnit.DAYS);
+        long days = 0;
         
         // How long to go until you are 25000 days old ?
-        Period period = LocalDate.now().until(birthday.atYear(year).plus(Period.ofDays(25000)));
+        Period period = null;
 
         
         // Verify
