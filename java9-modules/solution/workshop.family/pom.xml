@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>workshop</groupId>
-        <artifactId>workshop</artifactId>
+        <groupId>be.kwakeroni.workshop.java9modules.solution</groupId>
+        <artifactId>solution</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
@@ -15,12 +15,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>workshop</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>persons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>workshop</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>animals</artifactId>
             <version>${project.version}</version>
         </dependency>

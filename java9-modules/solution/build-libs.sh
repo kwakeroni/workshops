@@ -13,6 +13,7 @@ rm -rf workshop.my.policy.provider/target/classes
 set -e
 set -x
 
+mkdir -p libs
 
 javac -d workshop.persons/target/classes workshop.persons/src/main/java/workshop/person/Person.java
 jar --create --file libs/workshop.persons.jar -C workshop.persons/target/classes/ .

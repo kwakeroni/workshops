@@ -9,13 +9,13 @@ rm -rf img
 set -e
 set -x
 
-jlink --module-path /usr/lib/jvm/jdk-9.0.1/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance --compress=2 --strip-debug
+jlink --module-path $J9HOME/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance --compress=2 --strip-debug
 
 
 #jlink --list-plugins |grep Option
 
-#jlink --module-path /usr/lib/jvm/jdk-9.0.1/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance --compress=2
-#jlink --module-path /usr/lib/jvm/jdk-9.0.1/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance $@
+#jlink --module-path $J9HOME/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance --compress=2
+#jlink --module-path $J9HOME/jmods:mods --add-modules java.base,workshop.insurance,workshop.my.policy.provider --output img --launcher insurance=workshop.insurance $@
 
 
 ./img/bin/insurance
