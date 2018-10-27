@@ -53,12 +53,16 @@ public class FamilyInsurance {
         System.out.println("Classpath: " + System.getProperty("java.class.path"));
         System.out.println("Modulepath: " + System.getProperty("jdk.module.path"));
         System.out.println("Workshop modules: ");
-        FamilyInsurance.class.getModule().getLayer().modules()
-                .stream()
-                .map(Module::getName)
-                .filter(name -> ! (name.startsWith("java") || name.startsWith("jdk")))
-                .sorted()
-                .forEach(System.out::println);
+        if (FamilyInsurance.class.getModule().isNamed()) {
+            FamilyInsurance.class.getModule().getLayer().modules()
+                    .stream()
+                    .map(Module::getName)
+                    .filter(name -> !(name.startsWith("java") || name.startsWith("jdk")))
+                    .sorted()
+                    .forEach(System.out::println);
+        } else {
+            System.out.println("none");
+        }
     }
 
     private static Optional<Policy> getMyPolicy() {
