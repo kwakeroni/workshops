@@ -1,88 +1,111 @@
 package be.kwakeroni.workshop.java9.solution.library;
 
-import be.kwakeroni.workshop.java9.Person;
+import be.kwakeroni.workshop.java9.solution.Person;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 
 public class OptionalTest {
 
-    private static final Person person = new Person();
-    private static final Optional<String> OPTIONAL = Optional.of("value");
-    private static final Optional<String> PRESENT = Optional.of("value");
-    private static final Optional<String> ABSENT = Optional.empty();
+    private static final Person person = new Person("Bart", "Simpson")
+            .withEmail("bart.simpson@springfield.com")
+            .withAddress("Springfield");
+    private static final Person granny = new Person("Grand", "mother")
+            .withHomePhone("034567891")
+            .withAddress("Home");
+    private static final Person me = new Person("Me", "")
+            .withCellPhone("0498765432")
+            .withEmail("me@me.be");
 
+    /**
+     * The {@link Optional#ifPresent(Consumer)} method is useful in a functional-programming style,
+     * but cannot be used in an if-else scenario.
+     * The {@link Optional#ifPresentOrElse(Consumer, Runnable)} method can be used in that case.
+     */
     @Test
     public void ifPresentOrElse() {
-        person.getEmail().ifPresentOrElse(this::sendEmail, () -> this.sendLetter(person.getAddress()));
+        var emailService = Mockito.mock(EmailService.class);
+        var postOfficeService = Mockito.mock(PostOfficeService.class);
+
+        for (Person p : List.of(person, granny, me)) {
+            p.getEmail().ifPresentOrElse(emailService::sendEmail, () -> postOfficeService.sendLetter(p.getAddress()));
+        }
+
+        verify(emailService).sendEmail("bart.simpson@springfield.com");
+        verify(emailService).sendEmail("me@me.be");
+        verify(postOfficeService).sendLetter("Home");
     }
 
     /**
      * When Optional values can come from different sources,
      * it's not so easy to take the first one that is present.
-     * the {@link Optional#or(Supplier)} method can
+     * The {@link Optional#or(Supplier)} method can help by chaining optional values.
      */
     @Test
     public void or() {
-        Optional<String> phone =
-                person.getCellPhoneNumber()
-                        .or(person::getHomePhoneNumber)
-                        .or(() -> askUser("please provide phone number"));
+        assertThat(getPhoneNumber(granny)).isEqualTo("034567891");
+        assertThat(getPhoneNumber(me)).isEqualTo("0498765432");
+        assertThat(getPhoneNumber(person)).isNotNull();
+    }
 
-        String result = phone.orElse("no phone number");
-        assertThat(result).isEqualTo("no phone number");
+    /*
+     * Provides the phone number of the given person.
+     * Prefers the home phone number.
+     * Selects the cell phone number if that is absent.
+     * Requests the phone number to the user if both numbers are unknown.
+     */
+    private String getPhoneNumber(Person person) {
+        return person.getHomePhoneNumber()
+                .or(person::getCellPhoneNumber)
+                .or(person::requestPhoneNumber)
+                .orElse("no phone number");
     }
 
     /**
-     * The {@link Optional#stream()} provides an easy way to convert
+     * {@link Optional#stream()} provides an easy way to convert
      * Optionals to empty or singleton streams.
      */
     @Test
     public void stream() {
-        System.out.println("present stream: " + PRESENT.stream().count());
-        System.out.println("absent stream: " + ABSENT.stream().count());
-
-        List<String> middleNames = Stream.<Person>of()
-                .map(Person::getHomePhoneNumber)
+        List<String> emails = Stream.of(person, granny, me)
+                .map(Person::getEmail)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
 
-
+        assertThat(emails).containsExactlyInAnyOrder("bart.simpson@springfield.com", "me@me.be");
     }
 
     /**
+     * {@link Optional#get} is semantically a bit unclear,
+     * because it will throw an exception when there is no value.
      * The {@link Optional#orElseThrow()} method communicates very
      * clearly that an Exception will be thrown when there is no value.
+     *
+     * @since 10
      */
     @Test
-    // Since Java 10
     public void orElseThrow() {
-        assertThat(PRESENT.orElseThrow()).isEqualTo("value");
-        assertThatThrownBy(() -> ABSENT.orElseThrow())
+        assertThat(me.getCellPhoneNumber().orElseThrow()).isEqualTo("0498765432");
+        assertThatThrownBy(() -> granny.getCellPhoneNumber().orElseThrow())
                 .isInstanceOf(NoSuchElementException.class);
     }
 
-
-    private void sendEmail(String address) {
-        System.out.println("Sending email to: " + address);
+    private interface EmailService {
+        void sendEmail(String emailAddress);
     }
 
-    private void sendLetter(String address) {
-        System.out.println("Sending letter to: " + address);
+    private interface PostOfficeService {
+        void sendLetter(String address);
     }
-
-    private Optional<String> askUser(String question) {
-        return Optional.of(JOptionPane.showInputDialog(question))
-                .filter(string -> !string.isEmpty());
-    }
-
 }

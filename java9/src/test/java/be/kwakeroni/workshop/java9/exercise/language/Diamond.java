@@ -1,7 +1,13 @@
 package be.kwakeroni.workshop.java9.exercise.language;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+/**
+ * The diamond operator <> in Java 8 cannot be used with anonymous inner classes.
+ * It can since Java 9.
+ */
 public class Diamond {
 
     /**
@@ -17,26 +23,21 @@ public class Diamond {
     static abstract class ComparableFactory<T extends Serializable & Comparable<?>> extends Factory<T> {
     }
 
-    /**
-     * Use the Diamond operator to reduce the boilerplate.
-     */
-    static final Factory<?> FACTORY =
-            new Factory<StringBuffer>() {
-                @Override
-                public StringBuffer newInstance() {
-                    return new StringBuffer();
-                }
-            };
+    // Try to use the diamond operator in the following cases
+    public void testInnerFactories() {
 
-    /**
-     * Attempt to do the same with the following example.
-     */
-    static final ComparableFactory<?> COMPARABLE_FACTORY =
-            new ComparableFactory<String>() {
-                @Override
-                public String newInstance() {
-                    return "";
-                }
-            };
+        Factory<?> factory = new Factory<Calendar>() {
+            @Override
+            public Calendar newInstance() {
+                return new GregorianCalendar();
+            }
+        };
 
+        ComparableFactory<?> comparableFactory = new ComparableFactory<Calendar>() {
+            @Override
+            public Calendar newInstance() {
+                return new GregorianCalendar();
+            }
+        };
+    }
 }

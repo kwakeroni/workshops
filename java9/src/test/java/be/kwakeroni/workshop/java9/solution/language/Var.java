@@ -5,6 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+// Examples
+// V1 - Replace type declarations with var
+// V2 - Inference of generic parameters (to Object)
+// V3 - Inference of intersection types
+// V4 - var in loops
+// V5 - var as variable name
+// V6 - var not as class name
+// V7 - var not without type inference
+
 // Style guidelines http://openjdk.java.net/projects/amber/LVTIstyle.html
 // Principles
 // 1. Reading code is more important than writing code.
@@ -17,8 +26,13 @@ public class Var {
 
     public void test() {
         var var = "var";
-        var list = new ArrayList<>();
-        ArrayList<Object> ao = list;
+
+        List<String> diamond = new ArrayList<>();
+        var stringList = new ArrayList<String>();
+        ArrayList<String> sl = stringList;
+
+        var varList = new ArrayList<>();
+        ArrayList<Object> ao = varList;
 
 //        Serializable & Comparable<?> x = getSomeX();
         doSomeY(this::getSomeX);
@@ -31,7 +45,7 @@ public class Var {
             // in old loops
         }
 
-        for (var element : list){
+        for (var element : varList){
             // or new loops
         }
 
@@ -85,11 +99,10 @@ public class Var {
 
     private <Y extends Runnable & Comparable<?>> void doSomeY(Supplier<Y> runnableComparable){
         var y = runnableComparable.get();
-
     }
 
 
-    // Cannot be used as a class name
+// Cannot be used as a class name
 //    public static final class var {
 //
 //        private var noFields;
@@ -106,19 +119,4 @@ public class Var {
 //            }
 //        }
 //    }
-//    public static final class var {
-//        // Cannot be used as a class name
-//    }
-
-    class Parent<T> { class C {
-        public T value;
-    } }
-    class Child<T> extends Parent<List<T>> {}
-
-    Child<?>.C c = null; // means Parent<???>.C
-    {
-        var o = c.value.get(0);
-        c.value.set(0, null);
-    }
-
 }
