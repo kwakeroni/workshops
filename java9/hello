@@ -1,0 +1,7 @@
+#!/opt/java/jdk-14/bin/java --source 14
+
+public class HelloWorld {
+  public static void main(String[] args){
+    System.out.println("Hello World!");
+  }
+}
