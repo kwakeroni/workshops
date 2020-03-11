@@ -7,15 +7,9 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SmallFeatures {
+public class StudentParser {
 
-    public void treatGroups() throws IOException {
-        treatGroups(
-                parseStudents(Path.of("group1.csv")),
-                parseStudents(Path.of("group2.csv")));
-    }
-
-    private List<Student> parseStudents(Path path) throws IOException {
+    public List<Student> parseStudents(Path path) throws IOException {
         CsvParser<Student> parser = new CsvParser<>() {
             EnumMap<StudentProperty, Integer> columns = new EnumMap<StudentProperty, Integer>(StudentProperty.class);
 
@@ -49,13 +43,6 @@ public class SmallFeatures {
         }
     }
 
-    @java.lang.SafeVarargs
-    private void treatGroups(List<Student>... groups) {
-        for (int i=0; i<groups.length; i++){
-            System.out.println("- Group #%s".formatted(i));
-            groups[i].forEach(student -> System.out.println("-- %s %s (aged %s)".formatted(student.lastName(), student.firstName(), student.age())));
-        }
-    }
 
     //    interface Logger {
 //        void debug(String message, Throwable error);

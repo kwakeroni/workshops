@@ -58,11 +58,11 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <release>${java.version}</release>
                         <encoding>${project.encoding}</encoding>
-<!--                        <compilerArgument>&#45;&#45;enable-preview</compilerArgument>-->
+<!--                        <compilerArgs>&#45;&#45;enable-preview</compilerArgs>-->
                     </configuration>
                 </plugin>
                 <plugin>

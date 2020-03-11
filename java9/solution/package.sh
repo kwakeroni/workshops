@@ -1,0 +1,1 @@
+jpackage -i target -n workshop --main-jar java9-libs-solution-0.0.1-SNAPSHOT.jar --java-options --enable-preview
