@@ -41,11 +41,11 @@ public class Var {
         var runnableComparable = getSomeX();
         doSomeY(() -> runnableComparable);
 
-        for (var i=0; i<10; i++){
+        for (var i = 0; i < 10; i++) {
             // in old loops
         }
 
-        for (var element : varList){
+        for (var element : varList) {
             // or new loops
         }
 
@@ -93,21 +93,44 @@ public class Var {
     private <X extends Runnable & Comparable<?>> X getSomeX() {
         return null;
     }
+
     private <X extends Runnable & Comparable<?>> void doSomeX(X x) {
 
     }
 
-    private <Y extends Runnable & Comparable<?>> void doSomeY(Supplier<Y> runnableComparable){
+    private <Y extends Runnable & Comparable<?>> void doSomeY(Supplier<Y> runnableComparable) {
         var y = runnableComparable.get();
     }
 
+    private class var_ {
+        private String var = "var";
+        private void var(String var) {
+            var var_ = "var";
+            var string = "";
+            var list = new ArrayList<>();
+            var i = 1 + 2.0;
+        }
+    }
+
+//    public static final class Var__ {
+//        private var field = "field";
+//
+//        private var method(var argument){
+//            try {
+//                var something = getSomething();
+//            } catch (var exception){
+//            }
+//            return null;
+//        }
+//
+//        private String getSomething() {
+//            return "";
+//        }
+//    }
 
 // Cannot be used as a class name
-//    public static final class var {
-//
-//        private var noFields;
-//
-//        private var noMethods(var norArguments){
+    public static final class Var_ {
+//        private void method(var norArguments){
 //            try {
 //                  var norWithoutInitializer;
 //                  var nil = null;
@@ -115,8 +138,7 @@ public class Var {
 //                  String[] s1 = {"A", "B"};
 //                  var notForArrayInitializers = {"A", "B"};
 //            } catch (var orWithCaughtExceptions){
-//
 //            }
 //        }
-//    }
+    }
 }
