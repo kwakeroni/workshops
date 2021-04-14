@@ -16,8 +16,7 @@
     <description>Workshop introducing Java 9 novelties in the language and the libraries. Solutions to the exercises.</description>
 
     <properties>
-        <java.version>15</java.version>
-        <project.encoding>UTF-8</project.encoding>
+        <maven.compiler.release>15</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -43,18 +42,6 @@
             <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.junit.jupiter</groupId>-->
-<!--            <artifactId>junit-jupiter-engine</artifactId>-->
-<!--            <version>5.7.1</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.mockito</groupId>-->
-<!--            <artifactId>mockito-junit-jupiter</artifactId>-->
-<!--            <version>3.9.0</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -83,19 +70,18 @@
     <build>
         <pluginManagement>
             <plugins>
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
+                    <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <encoding>${project.encoding}</encoding>
+                        <compilerArgs>--enable-preview</compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
-                        <argLine>--enable-preview -Djava.awt.headless=true --show-module-resolution</argLine><!-- - -add-modules -->
+                        <argLine>--enable-preview -Djava.awt.headless=true</argLine><!-- - -show-module-resolution - -add-modules -->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -112,20 +98,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>15</source>
-                    <target>15</target>
-                    <release>15</release>
-                    <encoding>${project.encoding}</encoding>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 
 </project>
