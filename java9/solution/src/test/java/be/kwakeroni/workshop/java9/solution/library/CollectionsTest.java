@@ -1,6 +1,7 @@
 package be.kwakeroni.workshop.java9.solution.library;
 
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import java.util.*;
 
@@ -69,6 +70,7 @@ public class CollectionsTest {
 
 
     @Test
+    @DisplayName("The Simpsons List is immutable")
     public void testListFactory() {
         List<String> list = createSimpsonsList();
 
@@ -82,6 +84,7 @@ public class CollectionsTest {
     }
 
     @Test
+    @DisplayName("The Simpsons Set is immutable")
     public void testSetFactory() {
         Set<String> set = createSimpsonsSet();
 
@@ -92,6 +95,7 @@ public class CollectionsTest {
     }
 
     @Test
+    @DisplayName("The Simpsons Map is immutable")
     public void testMapFactory() {
         Map<String, Integer> map = createSimpsonsMap();
 
@@ -102,6 +106,7 @@ public class CollectionsTest {
     }
 
     @Test
+    @DisplayName("The Simpsons Family makes a defensive copy of its children")
     public void testDefensiveCopy() {
 
         List<String> children = new ArrayList<String>();

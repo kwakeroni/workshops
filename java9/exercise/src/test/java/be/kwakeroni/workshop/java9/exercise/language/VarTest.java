@@ -12,23 +12,28 @@ import static org.mockito.Mockito.*;
 public class VarTest {
 
     /**
-     * Fetch the actions from {@link #getActions()} and execute them using {@link #runAndClose(Collection)} .
+     * Fetch the actions from {@link #getActions()} and execute them using {@link #runAndClose(Collection)}.
+     * <p>
+     * Exercise: Use intersection types in the {@link #runAndClose(Collection)} method to avoid blindly casting to AutoCloseable.
+     * </p>
      * <p>
      * Intersection Types are types implementing multiple interfaces but without an explicit name.
      * These types are non-denotable, meaning they cannot be expressed in the source code explicitly.
+     * Intersection types can only be used in generic parameters, like in the {@link #getActions()} method.
      * </p>
      */
     private void getAndRunActions() {
-        runAndClose(getActions());
+        Collection<? extends Runnable> actions = getActions();
+        runAndClose(actions);
     }
 
     /**
      * Local variable type inference can also be used in for loops.
      */
-    private <CloseableRunnable extends Runnable & AutoCloseable> void runAndClose(Collection<? extends CloseableRunnable> actions) {
-        for (CloseableRunnable action : actions) {
-            try (CloseableRunnable act = action) {
-                act.run();
+    private void runAndClose(Collection<? extends Runnable> actions) {
+        for (Runnable runnable : actions) {
+            try (AutoCloseable closeable = (AutoCloseable) runnable) {
+                runnable.run();
             } catch (Exception e) {
                 e.printStackTrace();
             }

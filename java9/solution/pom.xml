@@ -16,7 +16,7 @@
     <description>Workshop introducing Java 9 novelties in the language and the libraries. Solutions to the exercises.</description>
 
     <properties>
-        <maven.compiler.release>15</maven.compiler.release>
+        <maven.compiler.release>16</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -64,6 +64,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.8.0-alpha2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
         </dependency>
     </dependencies>
 
