@@ -16,7 +16,7 @@
     <description>Workshop introducing Java 9 novelties in the language and the libraries. Solutions to the exercises.</description>
 
     <properties>
-        <maven.compiler.release>16</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -69,6 +69,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>
+        </dependency>
+        <dependency>
+            <groupId>be.kwakeroni</groupId>
+            <artifactId>assertj-json</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
