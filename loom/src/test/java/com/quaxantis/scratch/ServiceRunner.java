@@ -10,7 +10,7 @@ public class ServiceRunner extends AbstractService {
         try (AccountService accSvc = zipkinProxy.proxy(new AccountService());
              AggregatorService aggSvc = zipkinProxy.proxy(new AggregatorService(accSvc));
              ServiceRunner serviceRunner = zipkinProxy.proxy(new ServiceRunner(aggSvc))) {
-            serviceRunner.run();
+            serviceRunner.run(3);
         }
     }
 
@@ -21,10 +21,10 @@ public class ServiceRunner extends AbstractService {
     }
 
     @ZipkinProxy.Span
-    public void run() {
+    public void run(int count) {
         var futures =
-                IntStream.range(0, 3)
-                        .peek(_ -> sleep(100))
+                IntStream.range(0, count)
+                        .peek(_ -> sleep(200))
                         .mapToObj(this::aggregateAccounts)
                         .toList();
 
@@ -33,7 +33,7 @@ public class ServiceRunner extends AbstractService {
                         .map(AbstractService::waitFor)
                         .toList();
 
-        System.out.println(results.size() + " Results");
+        System.out.println(results.size() + " Results: " + results);
     }
 
     private CompletableFuture<?> aggregateAccounts(int i) {

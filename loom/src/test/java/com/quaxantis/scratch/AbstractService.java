@@ -17,7 +17,6 @@ public abstract class AbstractService implements Closeable {
     }
 
     protected final <T> CompletableFuture<T> callAsync(Supplier<T> call) {
-        sleep(200);
         Supplier<T> callWithTrace = ZipkinProxy.propagateAsyncTrace(call);
         return CompletableFuture.supplyAsync(callWithTrace, executorService);
     }

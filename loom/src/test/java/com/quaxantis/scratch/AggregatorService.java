@@ -8,7 +8,7 @@ public class AggregatorService extends AbstractService {
     private final AccountService accountService;
 
     public AggregatorService(AccountService accountService) {
-        super(Executors.newFixedThreadPool(2));
+        super(Executors.newFixedThreadPool(4));
 //        super(Executors.newVirtualThreadPerTaskExecutor());
         this.accountService = accountService;
     }
