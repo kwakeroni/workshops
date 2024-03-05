@@ -11,22 +11,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-<!-- Not picked up by Intellij yet -->
-<!--        <maven.compiler.enablePreview>true</maven.compiler.enablePreview>-->
+        <!-- Not picked up by Intellij yet -->
+        <!--        <maven.compiler.enablePreview>true</maven.compiler.enablePreview>-->
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.junit.jupiter</groupId>-->
-<!--            <artifactId>junit-jupiter-api</artifactId>-->
-<!--            <version>5.10.0</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.swagger.core.v3</groupId>-->
-<!--            <artifactId>swagger-annotations</artifactId>-->
-<!--            <version>${swagger-annotations-version}</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -48,12 +37,6 @@
             <version>3.0.2</version>
         </dependency>
         <dependency>
-            <groupId>io.zipkin.zipkin2</groupId>
-            <artifactId>zipkin</artifactId>
-            <version>2.24.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
             <version>1.3.5</version>
@@ -69,6 +52,23 @@
             <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -80,8 +80,15 @@
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
-                        <arg>-g:none</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <argLine>--add-opens java.base/java.util.concurrent=ALL-UNNAMED --enable-preview</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -112,6 +119,7 @@
     <profiles>
         <profile>
             <id>zipkin</id>
+            <!-- Run with mvn -P zipkin exec:java -->
             <build>
                 <pluginManagement>
                     <plugins>
@@ -120,11 +128,25 @@
                             <artifactId>exec-maven-plugin</artifactId>
                             <version>3.1.0</version>
                             <configuration>
-                                <executable>java</executable>
-                                <commandlineArgs>-jar zipkin.jar</commandlineArgs>
+                                <mainClass>org.springframework.boot.loader.JarLauncher</mainClass>
+                                <includeProjectDependencies>false</includeProjectDependencies>
+                                <includePluginDependencies>true</includePluginDependencies>
+                                <executableDependency>
+                                    <groupId>io.zipkin</groupId>
+                                    <artifactId>zipkin-server</artifactId>
+                                </executableDependency>
                                 <async>false</async>
                                 <asyncDestroyOnShutdown>false</asyncDestroyOnShutdown>
                             </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>io.zipkin</groupId>
+                                    <artifactId>zipkin-server</artifactId>
+                                    <version>2.24.3</version>
+                                    <classifier>exec</classifier>
+                                    <type>jar</type>
+                                </dependency>
+                            </dependencies>
                         </plugin>
                     </plugins>
                 </pluginManagement>

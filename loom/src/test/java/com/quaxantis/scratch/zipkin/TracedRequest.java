@@ -1,14 +1,18 @@
-package com.quaxantis.scratch;
+package com.quaxantis.scratch.zipkin;
 
 import org.openapitools.client.api.DefaultApi;
 import org.openapitools.client.model.Annotation;
 import org.openapitools.client.model.Endpoint;
 import org.openapitools.client.model.Span;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 
 public sealed abstract class TracedRequest implements AutoCloseable {
+    private static final Logger log = LoggerFactory.getLogger(TracedRequest.class);
+
     final DefaultApi zipkinClient;
     final Span payload;
 
@@ -41,12 +45,18 @@ public sealed abstract class TracedRequest implements AutoCloseable {
 
     private static Annotation annotation(String value) {
         return new Annotation()
-                .timestamp(System.currentTimeMillis())
+                .timestamp(epochMicro())
                 .value(value);
     }
 
+    private static long epochMicro() {
+        return System.nanoTime() / 1000;
+    }
+
     public static ClientRequest sendRootRequest(String serviceName, String name, DefaultApi zipkinClient) {
-        return new ClientRequest(null, null, serviceName, name, zipkinClient);
+        ClientRequest rootRequest = new ClientRequest(null, null, serviceName, name, zipkinClient);
+        log.info(STR. "Starting trace http://127.0.0.1:9411/zipkin/traces/\{ rootRequest.payload.getTraceId() }" );
+        return rootRequest;
     }
 
     public static final class ServerRequest extends TracedRequest {
@@ -85,7 +95,7 @@ public sealed abstract class TracedRequest implements AutoCloseable {
             UUID uuid = UUID.randomUUID();
             String most = Long.toHexString(uuid.getMostSignificantBits()).toLowerCase(); // 16
             String least = Long.toHexString(uuid.getLeastSignificantBits()).toLowerCase(); // 16
-            this.start = System.currentTimeMillis();
+            this.start = epochMicro();
             this.payload
                     .id(most) // 16
                     .traceId((traceId != null) ? traceId : most + least) // 32
@@ -117,11 +127,11 @@ public sealed abstract class TracedRequest implements AutoCloseable {
             // remoteEndpoint is the server. (in v1 "sa")
             this.payload
                     .timestamp(this.start)
-                    .duration(System.currentTimeMillis() - this.start)
+                    .duration(epochMicro() - this.start)
                     .addAnnotationsItem(annotation("cr"));
 
             if (this.payload.getParentId() == null) {
-                System.out.printf("-- Finished trace http://127.0.0.1:9411/zipkin/traces/%s%n", this.payload.getTraceId());
+                log.info(STR. "Finished trace http://127.0.0.1:9411/zipkin/traces/\{ this.payload.getTraceId() }" );
             }
         }
     }

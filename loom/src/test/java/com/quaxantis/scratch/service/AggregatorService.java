@@ -1,4 +1,6 @@
-package com.quaxantis.scratch;
+package com.quaxantis.scratch.service;
+
+import com.quaxantis.scratch.zipkin.ZipkinProxy;
 
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -11,13 +13,14 @@ public class AggregatorService extends AbstractService {
         super(Executors.newFixedThreadPool(4));
 //        super(Executors.newVirtualThreadPerTaskExecutor());
         this.accountService = accountService;
+        log.info("Using executor service {}", toStringRepresentation(executorService));
     }
 
     @ZipkinProxy.Span
-    public Object aggregateAccounts(Object request) {
-        var futures = IntStream.range(0, 3)
+    public Object aggregateAccounts(ServiceRequest request) {
+        var futures = IntStream.range(0, request.aggregateCount())
                 .mapToObj(i -> request + "/" + i)
-                .map(_ -> callAsync(() -> accountService.getAccount(request)))
+                .map(ignored -> callAsync(() -> accountService.getAccount(request)))
                 .toList();
 
         return futures.stream()
