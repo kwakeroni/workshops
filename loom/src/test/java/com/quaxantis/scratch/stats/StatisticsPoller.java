@@ -10,20 +10,25 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class StatisticsPoller implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(StatisticsPoller.class);
-    private final List<StatisticResult<?>> statistics = new ArrayList<>();
+    private final List<StatisticFuture<?>> statistics = new ArrayList<>();
     private volatile boolean closed = false;
 
     @Override
     public void close() {
+        closeAndLog(stat -> log.info(stat.toString()));
+    }
+
+    public void closeAndLog(Consumer<StatisticResult<?>> logger) {
         this.closed = true;
-        for (StatisticResult<?> stat : this.statistics) {
-            log.info(stat.toString());
+        for (StatisticFuture<?> stat : this.statistics) {
+            logger.accept(stat.toResult());
         }
     }
 
@@ -32,19 +37,21 @@ public class StatisticsPoller implements AutoCloseable {
     }
 
     public <T> void poll(Statistic<T> statistic) {
-        this.statistics.add(new StatisticResult<T>(statistic, poll(statistic.supplier(), statistic.reducer())));
+        this.statistics.add(new StatisticFuture<>(statistic, poll(statistic.supplier(), statistic.reducer())));
     }
 
     private <T> Future<Optional<T>> poll(Supplier<? extends T> supplier, BinaryOperator<T> reducer) {
         CompletableFuture<Optional<T>> result = new CompletableFuture<>();
 
-        Thread.ofPlatform().start(() -> {
-            Optional<T> stat = Stream.<T>generate(supplier)
-                    .peek(ignored -> sleep(1000))
-                    .takeWhile(ignored -> !isClosed())
-                    .reduce(reducer);
-            result.complete(stat);
-        });
+        Thread.ofPlatform()
+                .priority(Thread.MAX_PRIORITY)
+                .start(() -> {
+                    Optional<T> stat = Stream.<T>generate(supplier)
+                            .peek(ignored -> sleep(1000))
+                            .takeWhile(ignored -> !isClosed())
+                            .reduce(reducer);
+                    result.complete(stat);
+                });
 
         return result;
     }
@@ -57,14 +64,20 @@ public class StatisticsPoller implements AutoCloseable {
         }
     }
 
-    private record StatisticResult<T>(Statistic<T> statistic, Future<Optional<T>> future) {
-        @Override
-        public String toString() {
+    private record StatisticFuture<T>(Statistic<T> statistic, Future<Optional<T>> future) {
+        StatisticResult<T> toResult() {
             try {
-                return statistic().name() + ": " + future.get().map(statistic::toString).orElse("unknown");
+                return new StatisticResult<>(statistic, future.get());
             } catch (InterruptedException | ExecutionException exc) {
                 throw new RuntimeException(exc);
             }
+        }
+    }
+
+    public record StatisticResult<T>(Statistic<T> statistic, Optional<T> value) {
+        @Override
+        public String toString() {
+            return statistic().name() + ": " + value.map(statistic::toString).orElse("unknown");
         }
     }
 
